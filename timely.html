@@ -1,0 +1,46 @@
+<head>
+    <title>timely</title>
+    <style type="text/css">
+        html { height: 100% }
+        body { height: 100%; margin: 0; padding: 0 }
+        #map-canvas { height: 60%;}
+        #direction-map-canvas { height: 100%; float: left; width:70%;}
+        #directions-panel{
+            height: 100%;
+            float: right;
+            width: 29%;
+            overflow: auto;
+        }
+    </style>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBmwdwIvlMLh0m5oD1lbp4NU4ptHH5Acs&sensor=true">
+    </script>
+</head>
+
+<body></body>
+
+<template name="home">
+    <h1>{{greeting}}</h1>
+    <input type="button" value="Create event" />
+</template>
+
+
+<template name="create">
+    <div id="map-canvas"></div>
+    <br />
+    <input id="link" type="button" value="Get Link" />
+    <a id="requester-link"></a>
+    <a id="receiver-link"></a>
+</template>
+
+
+<template name="event">
+    <div id="direction-map-canvas"></div>
+    <div id="directions-panel"></div>
+    <div style="display:none;" id="pending">pending</div>
+</template>
+
+<template name="loading">
+    <h2>loading</h2>
+</template>
