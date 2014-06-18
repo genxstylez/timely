@@ -1,4 +1,6 @@
 if (Meteor.isClient) {
+
+
     function initialize() {
         var current = Router.current();
         var currentEvent = Events.findOne({
@@ -34,13 +36,29 @@ if (Meteor.isClient) {
             alert("Geolocation is not available!");
         }
 
+        render(currentEvent);
+        query = Events.find({
+            _id: currentEvent._id
+        });
+        var handle = query.observeChanges({
+            changed: function(id, changes) {
+                render(currentEvent, changes);
+            }
+        });
+    }
 
+    function render(current_event, changes) {
         var directionsDisplay;
         var directionsService = new google.maps.DirectionsService();
         var map;
 
         directionsDisplay = new google.maps.DirectionsRenderer();
-        var destination = new google.maps.LatLng(currentEvent.destination.lat, currentEvent.destination.lng);
+        var dest_data;
+        if (changes && changes.destination)
+            dest_data = changes
+        else
+            dest_data = current_event
+        var destination = new google.maps.LatLng(dest_data.destination.lat, dest_data.destination.lng);
 
         var mapOptions = {
             zoom: 16,
@@ -48,10 +66,16 @@ if (Meteor.isClient) {
         }
         map = new google.maps.Map($('#direction-map-canvas')[0], mapOptions);
         directionsDisplay.setMap(map);
+        $('#directions-panel').html('');
         directionsDisplay.setPanel($('#directions-panel')[0]);
-        if (currentEvent.starting) {
+        var start_data;
+        if (changes && changes.starting)
+            start_data = changes
+        else
+            start_data = current_event
+        if (start_data.starting) {
 
-            var origin = new google.maps.LatLng(currentEvent.starting.lat, currentEvent.starting.lng)
+            var origin = new google.maps.LatLng(start_data.starting.lat, start_data.starting.lng)
             var request = {
                 origin: origin,
                 destination: destination,
@@ -66,7 +90,6 @@ if (Meteor.isClient) {
             $('#pending').show();
         }
     }
-
 
     Template.event.rendered = function() {
         initialize();
