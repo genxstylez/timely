@@ -14,7 +14,7 @@ if (Meteor.isClient) {
                     if (mode == 'recv') {
                         Events.update(currentEvent._id, {
                             $set: {
-                                starting: {
+                                origin: {
                                     lng: position.coords.longitude,
                                     lat: position.coords.latitude
                                 }
@@ -24,13 +24,34 @@ if (Meteor.isClient) {
                         Events.update(currentEvent._id, {
                             $set: {
                                 destination: {
-                                    lng: 121.559769, //position.coords.longitude,
-                                    lat: 25.091623 //position.coords.latitude
+                                    lng: position.coords.longitude,
+                                    lat: position.coords.latitude
                                 }
                             }
                         });
                     }
-                });
+                }, function(error) {
+                    console.log('Error occurred, Sample data is being used!');
+                    if (mode == 'recv') {
+                        Events.update(currentEvent._id, {
+                            $set: {
+                                origin: {
+                                    lng: 121.564090,
+                                    lat: 25.033702
+                                }
+                            }
+                        });
+                    } else {
+                        Events.update(currentEvent._id, {
+                            $set: {
+                                destination: {
+                                    lng: 121.559769,
+                                    lat: 25.091623
+                                }
+                            }
+                        });
+                    }
+                }, {timeout: 10000});
             }, 1000);
         } else {
             alert("Geolocation is not available!");
@@ -69,13 +90,13 @@ if (Meteor.isClient) {
         $('#directions-panel').html('');
         directionsDisplay.setPanel($('#directions-panel')[0]);
         var start_data;
-        if (changes && changes.starting)
+        if (changes && changes.origin)
             start_data = changes
         else
             start_data = current_event
-        if (start_data.starting) {
+        if (start_data.origin) {
 
-            var origin = new google.maps.LatLng(start_data.starting.lat, start_data.starting.lng)
+            var origin = new google.maps.LatLng(start_data.origin.lat, start_data.origin.lng)
             var request = {
                 origin: origin,
                 destination: destination,
@@ -90,6 +111,18 @@ if (Meteor.isClient) {
             $('#pending').show();
         }
     }
+
+    Template.event.event_url = function () {
+        var current = Router.current();
+        var currentEvent = Events.findOne({
+            _id: current.params._id
+        });
+        return location.origin + Router.routes['event'].path({
+            _id: currentEvent._id
+        }, {
+            hash: 'recv'
+        });
+    };
 
     Template.event.rendered = function() {
         initialize();

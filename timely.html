@@ -1,5 +1,5 @@
 <head>
-    <title>timely</title>
+    <title>timie</title>
     <style type="text/css">
         html { height: 100% }
         body { height: 100%; margin: 0; padding: 0 }
@@ -11,33 +11,57 @@
             width: 29%;
             overflow: auto;
         }
+        .share {
+            position: absolute;
+            top: 0;
+            margin-top: 10px;
+            margin-left: -25%;
+        }
     </style>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBmwdwIvlMLh0m5oD1lbp4NU4ptHH5Acs&sensor=true">
     </script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 </head>
 
 <body></body>
 
 <template name="home">
-    <h1>{{greeting}}</h1>
-    <input type="button" value="Create event" />
+    <div class="container">
+        <h1>{{greeting}}</h1>
+        <input type="button" value="Create event" />
+    </div>
 </template>
-
 
 <template name="create">
-    <div id="map-canvas"></div>
-    <br />
-    <input id="link" type="button" value="Get Link" />
-    <a id="requester-link"></a>
-    <a id="receiver-link"></a>
+    <div class="container">
+        <h2>Abracadabra!</h2>
+    </div>
 </template>
-
 
 <template name="event">
     <div id="direction-map-canvas"></div>
     <div id="directions-panel"></div>
+    <!-- Button trigger modal -->
+    <button class="btn btn-primary btn-lg share" data-toggle="modal" data-target="#myModal">
+        Get Share Link
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Copy this url to your friend!</h4>
+          </div>
+          <div class="modal-body">
+            {{event_url}}
+          </div>
+        </div>
+      </div>
+    </div>
     <div style="display:none;" id="pending">Waiting for XXX to accept the request!</div>
 </template>
 

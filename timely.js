@@ -1,14 +1,12 @@
 if (Meteor.isClient) {
     Template.home.greeting = function() {
-        return "Welcome to timely.";
+        return "Welcome to timie.";
     };
 
     Template.home.events({
         'click input': function() {
             Router.go('create');
             // template data, if any, is available in 'this'
-            if (typeof console !== 'undefined')
-                console.log("You pressed the button");
         }
     });
 }
@@ -24,7 +22,6 @@ if (Meteor.isServer) {
         // code to run on server at startup
     });
 }
-
 
 
 // Route definitions
