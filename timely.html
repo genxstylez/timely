@@ -17,6 +17,13 @@
             margin-top: 10px;
             margin-left: -25%;
         }
+        #pending{
+            width: 29%;
+            float: right;
+            top: 0;
+            position: absolute;
+            right: 0;
+        }
     </style>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script type="text/javascript"
@@ -62,7 +69,13 @@
         </div>
       </div>
     </div>
-    <div style="display:none;" id="pending">Waiting for XXX to accept the request!</div>
+    <div style="display:none;" id="pending">
+        <div class="alert alert-dismissable alert-info alert-panel">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <h4>Attention!</h4>
+            <p>Pending to accept</p>
+         </div>
+    </div>
 </template>
 
 <template name="loading">

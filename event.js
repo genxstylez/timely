@@ -12,23 +12,27 @@ if (Meteor.isClient) {
             Meteor.setInterval(function() {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     if (mode == 'recv') {
-                        Events.update(currentEvent._id, {
-                            $set: {
-                                origin: {
-                                    lng: position.coords.longitude,
-                                    lat: position.coords.latitude
+                        if (currentEvent.origin && currentEvent.origin.lng != position.coords.longitude || currentEvent.origin && currentEvent.origin.lat != position.coords.latitude || currentEvent == undefined) {
+                            Events.update(currentEvent._id, {
+                                $set: {
+                                    origin: {
+                                        lng: position.coords.longitude,
+                                        lat: position.coords.latitude
+                                    }
                                 }
-                            }
-                        });
+                            })
+                        }
                     } else {
-                        Events.update(currentEvent._id, {
-                            $set: {
-                                destination: {
-                                    lng: position.coords.longitude,
-                                    lat: position.coords.latitude
+                        if (currentEvent.destination.lng != position.coords.longitude || currentEvent.destination.lat != position.coords.latitude) {
+                            Events.update(currentEvent._id, {
+                                $set: {
+                                    destination: {
+                                        lng: position.coords.longitude,
+                                        lat: position.coords.latitude
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 }, function(error) {
                     console.log('Error occurred, Sample data is being used!');
@@ -51,8 +55,10 @@ if (Meteor.isClient) {
                             }
                         });
                     }
-                }, {timeout: 10000});
-            }, 1000);
+                }, {
+                    timeout: 10000
+                });
+            }, 10000);
         } else {
             alert("Geolocation is not available!");
         }
@@ -95,7 +101,6 @@ if (Meteor.isClient) {
         else
             start_data = current_event
         if (start_data.origin) {
-
             var origin = new google.maps.LatLng(start_data.origin.lat, start_data.origin.lng)
             var request = {
                 origin: origin,
@@ -108,11 +113,17 @@ if (Meteor.isClient) {
                 }
             });
         } else {
+            marker = new google.maps.Marker({
+                position: destination,
+                map: map,
+                animation: google.maps.Animation.DROP
+            });
+            map.setCenter(destination);
             $('#pending').show();
         }
     }
 
-    Template.event.event_url = function () {
+    Template.event.event_url = function() {
         var current = Router.current();
         var currentEvent = Events.findOne({
             _id: current.params._id
