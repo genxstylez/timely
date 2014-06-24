@@ -12,7 +12,7 @@ if (Meteor.isClient) {
             Meteor.setInterval(function() {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     if (mode == 'recv') {
-                        if (currentEvent.origin && currentEvent.origin.lng != position.coords.longitude || currentEvent.origin && currentEvent.origin.lat != position.coords.latitude || currentEvent == undefined) {
+                        if (currentEvent.origin == undefined || currentEvent.origin.lng != position.coords.longitude || currentEvent.origin.lat != position.coords.latitude) {
                             Events.update(currentEvent._id, {
                                 $set: {
                                     origin: {
@@ -23,7 +23,7 @@ if (Meteor.isClient) {
                             })
                         }
                     } else {
-                        if (currentEvent.destination.lng != position.coords.longitude || currentEvent.destination.lat != position.coords.latitude) {
+                        if (currentcurrentEvent.destination.lng != position.coords.longitude || currentEvent.destination.lat != position.coords.latitude) {
                             Events.update(currentEvent._id, {
                                 $set: {
                                     destination: {
@@ -112,6 +112,7 @@ if (Meteor.isClient) {
                     directionsDisplay.setDirections(response);
                 }
             });
+            $('#pending').hide();
         } else {
             marker = new google.maps.Marker({
                 position: destination,
