@@ -1,7 +1,7 @@
 if (Meteor.isClient) {
     var map;
     var eventId;
-
+    // this is a dummy commit 
     function create() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
